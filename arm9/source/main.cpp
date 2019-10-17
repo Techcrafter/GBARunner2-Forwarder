@@ -54,7 +54,6 @@ void RemoveTrailingSlashes(std::string& path)
 	}
 }
 
-static int launchType = 1;	// 0 = Slot-1, 1 = SD/Flash card, 2 = SD/Flash card (Direct boot)
 static bool useBootstrap = true;
 static bool bootstrapFile = false;
 static bool homebrewBootstrap = true;
