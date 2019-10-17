@@ -30,43 +30,8 @@
 
 #include "nds_loader_arm9.h"
 #include "inifile.h"
-#include "perGameSettings.h"
-#include "fileCopy.h"
-#include "flashcard.h"
 
-const char* settingsinipath = "sd:/_nds/TWiLightMenu/settings.ini";
-const char* bootstrapinipath = "sd:/_nds/nds-bootstrap.ini";
-
-std::string ndsPath;
-std::string romfolder;
-std::string filename;
-
-static std::string romPath;
-
-/*
- * Remove trailing slashes from a pathname, if present.
- * @param path Pathname to modify.
- */
-void RemoveTrailingSlashes(std::string& path)
-{
-	while (!path.empty() && path[path.size()-1] == '/') {
-		path.resize(path.size()-1);
-	}
-}
-
-static bool useBootstrap = true;
 static bool bootstrapFile = false;
-static bool homebrewBootstrap = true;
-
-TWL_CODE void LoadSettings(void) {
-	// GUI
-	CIniFile settingsini(settingsinipath);
-	bootstrapFile = settingsini.GetInt("SRLOADER", "BOOTSTRAP_FILE", 0);
-	homebrewBootstrap = settingsini.GetInt("SRLOADER", "HOMEBREW_BOOTSTRAP", 0);
-	// nds-bootstrap
-	CIniFile bootstrapini( bootstrapinipath );
-	ndsPath = bootstrapini.GetString( "NDS-BOOTSTRAP", "NDS_PATH", "");
-}
 
 using namespace std;
 
@@ -74,17 +39,6 @@ void stop (void) {
 	while (1) {
 		swiWaitForVBlank();
 	}
-}
-
-char filePath[PATH_MAX];
-
-std::string ReplaceAll(std::string str, const std::string& from, const std::string& to) {
-    size_t start_pos = 0;
-    while((start_pos = str.find(from, start_pos)) != std::string::npos) {
-        str.replace(start_pos, from.length(), to);
-        start_pos += to.length(); // Handles case where 'to' is a substring of 'from'
-    }
-    return str;
 }
 
 //---------------------------------------------------------------------------------
@@ -115,7 +69,6 @@ int main(int argc, char **argv) {
 			bootstrapini.SetString("NDS-BOOTSTRAP", "NDS_PATH", "sd:/_nds/GBARunner2_arm7dldi_dsi.nds");
 			bootstrapini.SetString("NDS-BOOTSTRAP", "HOMEBREW_ARG", "");
 			bootstrapini.SetString("NDS-BOOTSTRAP", "RAM_DRIVE_PATH", "");
-			//bootstrapini.SetInt("NDS-BOOTSTRAP", "LANGUAGE", bstrap_language);
 			bootstrapini.SetInt("NDS-BOOTSTRAP", "DSI_MODE", 0);
 			bootstrapini.SetInt("NDS-BOOTSTRAP", "BOOST_CPU", 1);
 			bootstrapini.SetInt("NDS-BOOTSTRAP", "BOOST_VRAM", 0);

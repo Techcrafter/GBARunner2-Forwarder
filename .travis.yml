@@ -26,7 +26,6 @@ install:
 
 script:
   - export COMMIT_TAG="$(git log --format=%h -1)"
-  - export COMMIT_MESSAGE="$(git log --pretty=format:"%an - %s" -1)"
   - make
   
 addons:
@@ -44,7 +43,7 @@ after_success:
   - git config --local user.name "TWLBot"
   - git clone --depth 1 https://$GITHUB_TOKEN@github.com/TWLBot/overflow-builds.git
   - cd overflow-builds
-  - cp ../gbar2fwrd.nds gbar2fwrd.nds
+  - cp ../gbar2fwrd.nds gbar2fwrd-cleanup.nds
   - git stage .
   - git commit -m "gbar2fwrd | $COMMIT_TAG"
   - git push origin master

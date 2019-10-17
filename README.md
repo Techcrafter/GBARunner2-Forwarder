@@ -1,3 +1,3 @@
 forked from https://github.com/DS-Homebrew/TWiLightMenu/tree/master/rungame
 
-# ***ONLY USE WITH NINTENDO DSI FROM SD CARD, DO NOT USE ON 3DS OR FLASHCARDS***
+Please note: Only for DSi when launched from hiyaCFW SDNAND DSi Menu, not 3DS **or** flashcards
