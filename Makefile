@@ -130,7 +130,7 @@ dist:	all
 	@tar -cvjf $(TARGET)-$(VERSION).tar.bz2 hbmenu testfiles README.html COPYING hbmenu -X exclude.lst
 	
 $(TARGET).nds:	$(TARGET).arm7 $(TARGET).arm9
-	ndstool	-u 00030015 -g SLRN -c $(TARGET).nds -7 $(TARGET).arm7.elf -9 $(TARGET).arm9.elf \
+	ndstool	-u 00030004 -g HGBA -c $(TARGET).nds -7 $(TARGET).arm7.elf -9 $(TARGET).arm9.elf \
 			-a 00000138 -z 80040000 -b icon.bmp "GBARunner2;Gericom"
 
 $(TARGET).arm7: arm7/$(TARGET).elf
