@@ -17,7 +17,7 @@ include $(DEVKITARM)/ds_rules
 # GRAPHICS is a list of directories containing image files to be converted with grit
 # MAXMOD_SOUNDBANK contains a directory of music and sound effect files
 #---------------------------------------------------------------------------------
-TARGET		:=	rungame
+TARGET		:=	gbar2fwrd
 BUILD		:=	build
 SOURCES		:=	source dldi-include
 INCLUDES	:=	include dldi-include
