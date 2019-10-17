@@ -43,7 +43,7 @@ after_success:
   - git config --local user.name "TWLBot"
   - git clone --depth 1 https://$GITHUB_TOKEN@github.com/TWLBot/overflow-builds.git
   - cd overflow-builds
-  - cp ../gbar2fwrd.nds gbar2fwrd-cleanup.nds
+  - cp ../gbar2fwrd.nds gbar2fwrd.nds
   - git stage .
   - git commit -m "gbar2fwrd | $COMMIT_TAG"
   - git push origin master
