@@ -60,7 +60,7 @@ static bool homebrewBootstrap = true;
 
 TWL_CODE void LoadSettings(void) {
 	// GUI
-	CIniFile settingsinipath(settingsinipath);
+	CIniFile settingsini(settingsinipath);
 	bootstrapFile = settingsini.GetInt("SRLOADER", "BOOTSTRAP_FILE", 0);
 	homebrewBootstrap = settingsini.GetInt("SRLOADER", "HOMEBREW_BOOTSTRAP", 0);
 	// nds-bootstrap
@@ -87,28 +87,6 @@ std::string ReplaceAll(std::string str, const std::string& from, const std::stri
     return str;
 }
 
-TWL_CODE int lastRunROM() {
-	LoadSettings();
-	std::string bootstrapPath = (bootstrapFile ? "sd:/_nds/nds-bootstrap-hb-nightly.nds" : "sd:/_nds/nds-bootstrap-hb-release.nds");
-
-	std::vector<char*> argarray;
-	argarray.push_back(strdup(bootstrapPath.c_str()));
-	argarray.at(0) = (char*)bootstrapPath.c_str();
-
-			CIniFile bootstrapini("sd:/_nds/nds-bootstrap.ini");
-			bootstrapini.SetString("NDS-BOOTSTRAP", "NDS_PATH", "sd:/_nds/GBARunner2_arm7dldi_dsi.nds");
-			bootstrapini.SetString("NDS-BOOTSTRAP", "HOMEBREW_ARG", "");
-			bootstrapini.SetString("NDS-BOOTSTRAP", "RAM_DRIVE_PATH", "");
-			bootstrapini.SetInt("NDS-BOOTSTRAP", "LANGUAGE", bstrap_language);
-			bootstrapini.SetInt("NDS-BOOTSTRAP", "DSI_MODE", 0);
-			bootstrapini.SetInt("NDS-BOOTSTRAP", "BOOST_CPU", 1);
-			bootstrapini.SetInt("NDS-BOOTSTRAP", "BOOST_VRAM", 0);
-			bootstrapini.SaveIniFile( "sd:/_nds/nds-bootstrap.ini");
-			int err = runNdsFile (argarray[0], argarray.size(), (const char **)&argarray[0], false, true, false, true, true);
-			iprintf ("Start failed. Error %i\n", err);
-	return -1;
-}
-
 //---------------------------------------------------------------------------------
 int main(int argc, char **argv) {
 //---------------------------------------------------------------------------------
@@ -127,10 +105,23 @@ int main(int argc, char **argv) {
 
 	fifoWaitValue32(FIFO_USER_06);
 
-	int err = lastRunROM();
-	consoleDemoInit();
-	iprintf ("Start failed. Error %i", err);
-	stop();
+	std::string bootstrapPath = (bootstrapFile ? "sd:/_nds/nds-bootstrap-hb-nightly.nds" : "sd:/_nds/nds-bootstrap-hb-release.nds");
+
+	std::vector<char*> argarray;
+	argarray.push_back(strdup(bootstrapPath.c_str()));
+	argarray.at(0) = (char*)bootstrapPath.c_str();
+
+			CIniFile bootstrapini("sd:/_nds/nds-bootstrap.ini");
+			bootstrapini.SetString("NDS-BOOTSTRAP", "NDS_PATH", "sd:/_nds/GBARunner2_arm7dldi_dsi.nds");
+			bootstrapini.SetString("NDS-BOOTSTRAP", "HOMEBREW_ARG", "");
+			bootstrapini.SetString("NDS-BOOTSTRAP", "RAM_DRIVE_PATH", "");
+			//bootstrapini.SetInt("NDS-BOOTSTRAP", "LANGUAGE", bstrap_language);
+			bootstrapini.SetInt("NDS-BOOTSTRAP", "DSI_MODE", 0);
+			bootstrapini.SetInt("NDS-BOOTSTRAP", "BOOST_CPU", 1);
+			bootstrapini.SetInt("NDS-BOOTSTRAP", "BOOST_VRAM", 0);
+			bootstrapini.SaveIniFile( "sd:/_nds/nds-bootstrap.ini");
+			int err = runNdsFile (argarray[0], argarray.size(), (const char **)&argarray[0], false, true, false, true, true);
+			iprintf ("Start failed. Error %i\n", err);
 
 	return 0;
 }
