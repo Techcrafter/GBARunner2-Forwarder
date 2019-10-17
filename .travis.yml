@@ -1,0 +1,56 @@
+language: cpp
+
+os: linux
+sudo: false
+dist: trusty
+
+env:
+  global:
+    - DEVKITPRO=/opt/devkitpro    
+    - DEVKITARM=/opt/devkitpro/devkitARM
+    
+cache:
+  directories:
+    - "$HOME/.local"
+    - "$DEVKITPRO"
+
+before_install:
+  - curl -L https://github.com/devkitPro/pacman/releases/download/devkitpro-pacman-1.0.1/devkitpro-pacman.deb -o pacman.deb
+  - sudo apt-get install -y p7zip-full
+
+install:
+  - sudo dpkg -i pacman.deb
+  - sudo dkp-pacman -Sy
+  - sudo dkp-pacman -S devkitARM general-tools dstools ndstool libnds libfat-nds grit mmutil --noconfirm
+  - export DEVKITPRO=/opt/devkitpro
+  - export DEVKITARM=${DEVKITPRO}/devkitARM
+
+script:
+  - export COMMIT_TAG="$(git log --format=%h -1)"
+  - export COMMIT_MESSAGE="$(git log --pretty=format:"%an - %s" -1)"
+  - make
+  
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - gcc-4.9
+    - g++-4.9
+    - libstdc++6
+    - lftp
+
+after_success:
+  - echo 'Build Successful'
+  - git config --local user.name "TWLBot"
+  - git clone --depth 1 https://$GITHUB_TOKEN@github.com/TWLBot/overflow-builds.git
+  - cd overflow-builds
+  - cp ../gbar2fwrd.nds gbar2fwrd.nds
+  - git stage .
+  - git commit -m "gbar2fwrd | $COMMIT_TAG"
+  - git push origin master
+  - export CURRENT_DATE=$(date +'%Y%m%d-%H%M%S')
+  - git tag v$CURRENT_DATE
+
+after_failure:
+  - echo 'Build Failed'
