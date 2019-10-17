@@ -23,12 +23,12 @@ VERSION	:=	$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)
 # DATA is a list of directories containing binary files embedded using bin2o
 # GRAPHICS is a list of directories containing image files to be converted with grit
 #---------------------------------------------------------------------------------
-TARGET		:=	rungame
+TARGET		:=	gbar2fwrd
 BUILD		:=	build
 SOURCES		:=	source source/graphics
 INCLUDES	:=	include
 DATA		:=	data  
-GRAPHICS	:=  gfx
+GRAPHICS	:=  	gfx
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -131,11 +131,7 @@ dist:	all
 	
 $(TARGET).nds:	$(TARGET).arm7 $(TARGET).arm9
 	ndstool	-u 00030015 -g SLRN -c $(TARGET).nds -7 $(TARGET).arm7.elf -9 $(TARGET).arm9.elf \
-			-g SLRN 01 "TWLMENUPP-LR" -a 00000138 -z 80040000 -b icon.bmp "TWiLight Menu++;Last-run ROM;RocketRobz"
-
-ifneq ($(strip $(TWLNOPATCHSRLHEADER)), 1)
-		python2 patch_ndsheader_dsiware_twltouch.py $(TARGET).nds
-endif
+			-a 00000138 -z 80040000 -b icon.bmp "GBARunner2;Gericom"
 
 $(TARGET).arm7: arm7/$(TARGET).elf
 	cp arm7/$(TARGET).elf $(TARGET).arm7.elf
