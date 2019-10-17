@@ -70,9 +70,7 @@ TWL_CODE void LoadSettings(void) {
 
 using namespace std;
 
-//---------------------------------------------------------------------------------
 void stop (void) {
-//---------------------------------------------------------------------------------
 	while (1) {
 		swiWaitForVBlank();
 	}
@@ -91,32 +89,23 @@ std::string ReplaceAll(std::string str, const std::string& from, const std::stri
 
 TWL_CODE int lastRunROM() {
 	LoadSettings();
+	std::string bootstrapPath = (bootstrapFile ? "sd:/_nds/nds-bootstrap-hb-nightly.nds" : "sd:/_nds/nds-bootstrap-hb-release.nds");
 
-	vector<char*> argarray;
-	if (launchType > 3) {
-		argarray.push_back(strdup("null"));
-		argarray.push_back(strdup(homebrewArg.c_str()));
-	}
+	std::vector<char*> argarray;
+	argarray.push_back(strdup(bootstrapPath.c_str()));
+	argarray.at(0) = (char*)bootstrapPath.c_str();
 
-	switch (launchType) {
-		case 0:
-
-				char ndsToBoot[256];
-				sprintf(ndsToBoot, "sd:/_nds/nds-bootstrap-hb-nightly.nds");
-				if(access(ndsToBoot, F_OK) != 0) {
-					sprintf(ndsToBoot, "fat:/_nds/nds-bootstrap-hb-nightly.nds");
-				}
-
-				argarray.at(0) = (char *)ndsToBoot;
-				CIniFile bootstrapini(bootstrapinipath);
-				bootstrapini.SetString("NDS-BOOTSTRAP", "NDS_PATH", romPath);
-				bootstrapini.SetInt("NDS-BOOTSTRAP", "DSI_MODE", perGameSettings_dsiMode == -1 ? bstrap_dsiMode : perGameSettings_dsiMode);
-				bootstrapini.SetInt("NDS-BOOTSTRAP", "BOOST_CPU", perGameSettings_boostCpu == -1 ? boostCpu : perGameSettings_boostCpu);
-				bootstrapini.SetInt( "NDS-BOOTSTRAP", "BOOST_VRAM", perGameSettings_boostVram == -1 ? boostVram : perGameSettings_boostVram);
-				bootstrapini.SaveIniFile(bootstrapinipath);
-
-				return runNdsFile (argarray[0], argarray.size(), (const char **)&argarray[0], (homebrewBootstrap true), true, false, true, true);
-	
+			CIniFile bootstrapini("sd:/_nds/nds-bootstrap.ini");
+			bootstrapini.SetString("NDS-BOOTSTRAP", "NDS_PATH", "sd:/_nds/GBARunner2_arm7dldi_dsi.nds");
+			bootstrapini.SetString("NDS-BOOTSTRAP", "HOMEBREW_ARG", "");
+			bootstrapini.SetString("NDS-BOOTSTRAP", "RAM_DRIVE_PATH", "");
+			bootstrapini.SetInt("NDS-BOOTSTRAP", "LANGUAGE", bstrap_language);
+			bootstrapini.SetInt("NDS-BOOTSTRAP", "DSI_MODE", 0);
+			bootstrapini.SetInt("NDS-BOOTSTRAP", "BOOST_CPU", 1);
+			bootstrapini.SetInt("NDS-BOOTSTRAP", "BOOST_VRAM", 0);
+			bootstrapini.SaveIniFile( "sd:/_nds/nds-bootstrap.ini");
+			int err = runNdsFile (argarray[0], argarray.size(), (const char **)&argarray[0], false, true, false, true, true);
+			iprintf ("Start failed. Error %i\n", err);
 	return -1;
 }
 
