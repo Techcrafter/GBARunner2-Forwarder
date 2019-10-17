@@ -61,6 +61,7 @@ static bool homebrewBootstrap = true;
 
 TWL_CODE void LoadSettings(void) {
 	// GUI
+	CIniFile settingsinipath(settingsinipath);
 	bootstrapFile = settingsini.GetInt("SRLOADER", "BOOTSTRAP_FILE", 0);
 	homebrewBootstrap = settingsini.GetInt("SRLOADER", "HOMEBREW_BOOTSTRAP", 0);
 	// nds-bootstrap
