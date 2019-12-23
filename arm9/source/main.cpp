@@ -66,7 +66,7 @@ int main(int argc, char **argv) {
 	argarray.at(0) = (char*)bootstrapPath.c_str();
 
 			CIniFile bootstrapini("sd:/_nds/nds-bootstrap.ini");
-			bootstrapini.SetString("NDS-BOOTSTRAP", "NDS_PATH", "sd:/_nds/GBARunner2_arm7dldi_dsi.nds");
+			bootstrapini.SetString("NDS-BOOTSTRAP", "NDS_PATH", "sd:/_nds/GBARunner2_arm7dldi_3ds.nds");
 			bootstrapini.SetString("NDS-BOOTSTRAP", "HOMEBREW_ARG", "");
 			bootstrapini.SetString("NDS-BOOTSTRAP", "RAM_DRIVE_PATH", "");
 			bootstrapini.SetInt("NDS-BOOTSTRAP", "DSI_MODE", 0);
